@@ -1,65 +1,72 @@
-//variáveis que pegam os elementos html
+
+//variáveis que pegam os ids
 let listElement = document.querySelector("#app ul");
 let inputElement = document.querySelector("#app input");
 let buttonElement = document.querySelector("#app button");
-//variável que guarda o array da lista
-let tarefas = JSON.parse(localStorage.getItem("@listaTarefas")) || [];
 
-function renderTarefas(){
+//arrey que guarda as tarefas
+let tarefas = JSON.parse(localStorage.getItem('@lista')) || [];
+
+//renderisando tarefas
+function renderTarefas() {
   listElement.innerHTML = "";
 
-  tarefas.map((todo)=>{
-    let liElement = document.createElement("li");
-    let tarefaText = document.createTextNode(todo);
+  tarefas.map((todo) => {
+    let liElement = document.createElement('li');//criando o <li>
+    let linkExcluir = document.createElement('a');
+    let texExcluir = document.createTextNode('Excluir');
+    let textoLista = document.createTextNode(todo);
 
-    let linkElement = document.createElement("a");
-    linkElement.setAttribute("href", "#");
 
-    let linkText = document.createTextNode(" [ Excluir ]");
-    linkElement.appendChild(linkText);
-
+    //pegando a posição do array para poder excluir
     let posicao = tarefas.indexOf(todo);
 
-    linkElement.setAttribute("onclick", `deletarTarefa(${posicao})`)
+    //configurando os elementos
+    //configuração do link excluir
+    linkExcluir.setAttribute('href', '#');
+    linkExcluir.appendChild(texExcluir);//passando o texto para o elemento <a>
+    linkExcluir.setAttribute('onclick', `acaoExcluir(${posicao})`);//colocando ação no link
 
-    liElement.appendChild(tarefaText);
-    liElement.appendChild(linkElement);
-    listElement.appendChild(liElement);
+    //configuração da lista
+    liElement.appendChild(textoLista);// mandando o texto para o li
+    liElement.appendChild(linkExcluir);//render button no li
+    listElement.appendChild(liElement);//render lista no <ul>
+
 
 
   })
-
 }
 
-renderTarefas();
-
-function adicionarTarefas(){
-  if(inputElement.value === ''){
+function adicionarTarefas() {
+  if (inputElement.value === '') {
     alert("Digite alguma tarefa");
     return false;
-  }else{
-    let novaTarefa = inputElement.value;
+  } else {
+    let novaTarefa = inputElement.value;//variável de escopo que pega o value do input
 
-    tarefas.push(novaTarefa)
+    tarefas.push(novaTarefa);
     inputElement.value = '';
-
-    renderTarefas();
-    salvarDados();
 
   }
 
+  renderTarefas();
+  savaLocalStorage();
+
+
 }
 
-buttonElement.onclick = adicionarTarefas;// adicionando ação ao buttom
-
-
-function deletarTarefa(posicao){
+function acaoExcluir(posicao) {
   tarefas.splice(posicao, 1);
   renderTarefas();
-  salvarDados();
+  savaLocalStorage();
 }
 
-
-function salvarDados(){
-  localStorage.setItem("@listaTarefas", JSON.stringify(tarefas) )
+//função que salva dados no localStorage
+function savaLocalStorage() {
+  localStorage.setItem('@lista', JSON.stringify(tarefas));
 }
+
+buttonElement.onclick = adicionarTarefas;//adicionando a ação para o buttom
+
+//renderizando a lista 
+renderTarefas();
