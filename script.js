@@ -14,7 +14,7 @@ function renderTarefas() {
   tarefas.map((todo) => {
     let liElement = document.createElement('li');//criando o <li>
     let linkExcluir = document.createElement('a');
-    let texExcluir = document.createTextNode('Excluir');
+    let texExcluir = document.createTextNode(' [ excluir ]');
     let textoLista = document.createTextNode(todo);
 
 
